@@ -54,20 +54,10 @@ class Game
         end
     end
     def isGameFinished
-        if rowFinished() == true || columnFinished() == true || diagonalFinished() == true then
+        if rowFinished() || columnFinished() || diagonalFinished() then
             return true
         elsif !rowFinished() || !columnFinished() || !diagonalFinished() then
             return false
         end
     end
 end
-
-test = Game.new("Abdul", "Mamadou")
-
-test.setCellValue("Mamadou", 0, 0)
-test.setCellValue("Abdul", 0, 2)
-test.setCellValue("Mamadou", 1, 1)
-test.setCellValue("Mamadou", 2, 2)
-test.setCellValue("Abdul", 2, 0)
-test.showCurrentTable()
-puts test.isGameFinished()
