@@ -5,25 +5,42 @@ class Game
         [" ", " ", " "]
     ]
     def initialize(player1, player2)
+        @turn = 0
         @p1 = player1
         @p2 = player2
     end
-    def showCurrentPlayers
-        puts "#@p1 - vs - #@p2"
-    end
-    def showCurrentTable
+    def showTitle()
         puts "
-         #{@@gamePlate[0][0]} | #{@@gamePlate[0][1]} | #{@@gamePlate[0][2]}
-         --+---+--
-         #{@@gamePlate[1][0]} | #{@@gamePlate[1][1]} | #{@@gamePlate[1][2]}
-         --+---+--
-         #{@@gamePlate[2][0]} | #{@@gamePlate[2][1]} | #{@@gamePlate[2][2]}
+            _______ _   _______      _______         
+            |__   __(_) |__   __|    |__   __|        
+               | |   _  ___| | __ _  ___| | ___   ___ 
+               | |  | |/ __| |/ _` |/ __| |/ _ \\ / _ \\
+               | |  | | (__| | (_| | (__| | (_) |  __/
+               |_|  |_|\\___|_|\\__,_|\\___|_|\\___/ \\___|                                         
+        "
+    end
+    def showCurrentPlayers()
+        puts "
+                        | #{@p1} -vs- #{@p2} |
+        "
+    end
+    def showCurrentTable()
+        puts "
+                             0   1   2
+                             -   -   -  
+                         0 | #{@@gamePlate[0][0]} | #{@@gamePlate[0][1]} | #{@@gamePlate[0][2]} |
+                             --+---+--
+                         1 | #{@@gamePlate[1][0]} | #{@@gamePlate[1][1]} | #{@@gamePlate[1][2]} | Y
+                             --+---+--
+                         2 | #{@@gamePlate[2][0]} | #{@@gamePlate[2][1]} | #{@@gamePlate[2][2]} |
+                             -   -   -
+                                 X
         "
     end
     def setCellValue(player, xAxis, yAxis)
         @@gamePlate[yAxis][xAxis] = player == @p1 ? "X" : "O"
     end
-    def rowFinished
+    def rowFinished()
         for i in 0..@@gamePlate.size-1
             if @@gamePlate[i].uniq.size == 1 && !@@gamePlate[i].include?(" ") then
                 return true
@@ -34,7 +51,7 @@ class Game
             end
         end
     end
-    def columnFinished
+    def columnFinished()
         for i in 0..@@gamePlate.size-1
             checkingArray = []
             checkingArray.push(@@gamePlate[0][i], @@gamePlate[1][i], @@gamePlate[2][i])
@@ -47,7 +64,7 @@ class Game
             end
         end
     end
-    def diagonalFinished
+    def diagonalFinished()
         diagArray1 = [@@gamePlate[0][0], @@gamePlate[1][1], @@gamePlate[2][2]]
         diagArray2 = [@@gamePlate[0][2], @@gamePlate[1][1], @@gamePlate[2][0]]
         diagCondition1 = diagArray1.uniq.size == 1 && !diagArray1.include?(" ") ? true : false
@@ -58,39 +75,45 @@ class Game
             return false
         end
     end
-    def isGameFinished
+    def isGameFinished()
         if rowFinished() || columnFinished() || diagonalFinished() then
             return true
         elsif !rowFinished() || !columnFinished() || !diagonalFinished() then
             return false
         end
     end
-end
-
-puts "Player 1's name :"
-player1 = gets
-puts "Player 2's name :"
-player2 = gets
-currentGame = Game.new(player1, player2);
-turns = 0;
-currentPlayer = ""
-puts `clear`
-
-while currentGame.isGameFinished() == false do
-    puts currentGame.showCurrentTable()
-    puts currentGame.showCurrentPlayers()
-    if (turns % 2 == 0) then
-        currentPlayer = player1;
-    else
-        currentPlayer = player2;
+    def nextTurn()
+        @turn += 1
     end
-    print "#{currentPlayer} enter X coordinate:"
-    xCoord = gets
-    print "#{currentPlayer} enter Y coordinate:"
-    yCoord = gets
-    currentGame.setCellValue(currentPlayer, xCoord.to_i, yCoord.to_i)
-    turns += 1
-    puts `clear`
+    def getTurn()
+        return turn
+    end
+    def getCurrentPlayer()
+        return @turn % 2 == 0 ? @p1 : @p2
+    end
 end
 
-puts "#{currentPlayer} won the game !"
+puts `clear`
+isWon = false
+print "Player 1's name: "
+player1 = gets
+print "Player 2's name: "
+player2 = gets
+tttGame = Game.new(player1.chomp, player2.chomp);
+puts `clear`
+loop do   
+    puts tttGame.showTitle()
+    puts tttGame.showCurrentTable()
+    puts tttGame.showCurrentPlayers()
+    print "#{tttGame.getCurrentPlayer()} enter X coordinate: "
+    xCoord = gets
+    print "#{tttGame.getCurrentPlayer()} enter Y coordinate: "
+    yCoord = gets
+    tttGame.setCellValue(tttGame.getCurrentPlayer(), xCoord.to_i, yCoord.to_i)
+    isWon = tttGame.isGameFinished()
+    tttGame.nextTurn()
+    puts `clear`  
+   break if isWon == true
+end
+
+puts "#{tttGame.getCurrentPlayer()} won the game !"
