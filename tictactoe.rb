@@ -9,12 +9,9 @@ class Game
         @p2 = player2
     end
     def showCurrentPlayers
-        puts "Current players: #@p1 - vs - #@p2"
+        puts "#@p1 - vs - #@p2"
     end
     def showCurrentTable
-        puts "
-        - Game in Progress - 
-        "
         puts "
          #{@@gamePlate[0][0]} | #{@@gamePlate[0][1]} | #{@@gamePlate[0][2]}
          --+---+--
@@ -70,9 +67,30 @@ class Game
     end
 end
 
-# test = Game.new("P1", "P2");
-# test.setCellValue("P1", 0, 2)
-# test.setCellValue("P1", 1, 1)
-# test.setCellValue("P1", 2, 0)
-# test.setCellValue("P2", 1, 0)
-# test.showCurrentTable();
+puts "Player 1's name :"
+player1 = gets
+puts "Player 2's name :"
+player2 = gets
+currentGame = Game.new(player1, player2);
+turns = 0;
+currentPlayer = ""
+puts `clear`
+
+while currentGame.isGameFinished() == false do
+    puts currentGame.showCurrentTable()
+    puts currentGame.showCurrentPlayers()
+    if (turns % 2 == 0) then
+        currentPlayer = player1;
+    else
+        currentPlayer = player2;
+    end
+    print "#{currentPlayer} enter X coordinate:"
+    xCoord = gets
+    print "#{currentPlayer} enter Y coordinate:"
+    yCoord = gets
+    currentGame.setCellValue(currentPlayer, xCoord.to_i, yCoord.to_i)
+    turns += 1
+    puts `clear`
+end
+
+puts "#{currentPlayer} won the game !"
