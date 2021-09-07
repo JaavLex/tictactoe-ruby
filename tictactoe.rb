@@ -12,8 +12,16 @@ class Game
         puts "Current players: #@p1 - vs - #@p2"
     end
     def showCurrentTable
-        puts "- Game in Progress - "
-        puts "#@@gamePlate"
+        puts "
+        - Game in Progress - 
+        "
+        puts "
+         #{@@gamePlate[0][0]} | #{@@gamePlate[0][1]} | #{@@gamePlate[0][2]}
+         --+---+--
+         #{@@gamePlate[1][0]} | #{@@gamePlate[1][1]} | #{@@gamePlate[1][2]}
+         --+---+--
+         #{@@gamePlate[2][0]} | #{@@gamePlate[2][1]} | #{@@gamePlate[2][2]}
+        "
     end
     def setCellValue(player, xAxis, yAxis)
         @@gamePlate[yAxis][xAxis] = player == @p1 ? "X" : "O"
@@ -61,3 +69,10 @@ class Game
         end
     end
 end
+
+# test = Game.new("P1", "P2");
+# test.setCellValue("P1", 0, 2)
+# test.setCellValue("P1", 1, 1)
+# test.setCellValue("P1", 2, 0)
+# test.setCellValue("P2", 1, 0)
+# test.showCurrentTable();
